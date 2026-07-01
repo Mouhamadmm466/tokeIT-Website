@@ -6,43 +6,10 @@ import {
   type MarketingAction,
   type MarketingIconLink,
   type MarketingLink,
+  type PlaceholderSuggestion,
 } from "./content";
 import { MarketingMotion } from "./marketing-motion";
 import styles from "./marketing.module.css";
-
-const visibilityStats = [
-  { label: "Tracking mode", value: "Automatic" },
-  { label: "Data layer", value: "Local-first" },
-  { label: "Views", value: "CLI + desktop" },
-  { label: "Team layer", value: "Opt-in sync" },
-];
-
-const visibilityUseCases = [
-  "Feature cost attribution",
-  "Prompt quality coaching",
-  "Provider comparison",
-  "Team efficiency review",
-];
-
-const privacyBadges = ["Local-first", "Opt-in sync", "Private coaching", "Raw prompts stay on-device"];
-
-const privacyRows = [
-  {
-    title: "Encryption and storage boundaries",
-    body: "Session intelligence is stored locally by default, with cloud sync only when the user explicitly enables team features.",
-    meta: "local · encrypted",
-  },
-  {
-    title: "Team visibility without session exposure",
-    body: "Admins and members can see shared performance metrics, but not private coaching notes or raw session content.",
-    meta: "metrics only",
-  },
-  {
-    title: "Auditability when it matters",
-    body: "Projects, cost, commits, model usage, and trends stay structured enough for team reporting without turning the product into surveillance.",
-    meta: "roles · reports",
-  },
-];
 
 function AppleLogo() {
   return (
@@ -71,7 +38,15 @@ function FooterSocialLink({ link }: { link: MarketingIconLink }) {
         </svg>
       ) : null}
       {link.icon === "instagram" ? (
-        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.9"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <rect x="3" y="3" width="18" height="18" rx="5" ry="5" />
           <circle cx="12" cy="12" r="4" />
           <path d="M17.5 6.5h.01" />
@@ -124,17 +99,170 @@ function SectionRail({
     <div className={styles.sectionRail} data-reveal>
       <div className={styles.sectionRailLeft}>
         <span className={styles.sectionRailIndex}>{index}</span>
-        <span className={styles.sectionRailLine} aria-hidden="true" />
+        <span className={`${styles.sectionRailLine} ${styles.sectionRailLineLead}`} aria-hidden="true" />
         <span className={styles.sectionRailLabel}>{label}</span>
+        <span className={`${styles.sectionRailLine} ${styles.sectionRailLineTrail}`} aria-hidden="true" />
       </div>
       <div className={styles.sectionRailMeta}>{meta}</div>
     </div>
   );
 }
 
+function MediaPlaceholder({
+  suggestion,
+  theme = "light",
+  mode = "instructional",
+}: {
+  suggestion: PlaceholderSuggestion;
+  theme?: "light" | "dark";
+  mode?: "instructional" | "presentation";
+}) {
+  const isPresentation = mode === "presentation";
+
+  return (
+    <div
+      className={`${styles.mediaPlaceholder} ${
+        theme === "dark" ? styles.mediaPlaceholderDark : styles.mediaPlaceholderLight
+      }`}
+      data-card-pop
+    >
+      <div className={`${styles.mediaPlaceholderHead} ${isPresentation ? styles.mediaPlaceholderHeadClean : ""}`}>
+        <span />
+        <span />
+        <span />
+        {isPresentation ? null : <strong>{suggestion.label}</strong>}
+      </div>
+      <div className={`${styles.mediaPlaceholderBody} ${isPresentation ? styles.mediaPlaceholderBodyClean : ""}`}>
+        <div className={styles.mediaPlaceholderCanvas}>
+          {isPresentation ? null : <span className={styles.mediaPlaceholderFormat}>{suggestion.format}</span>}
+          <div className={styles.mediaPlaceholderGrid} aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+        </div>
+        {isPresentation ? null : <p>{suggestion.recommendation}</p>}
+      </div>
+    </div>
+  );
+}
+
+function WorkflowVisual({ stepIndex }: { stepIndex: string }) {
+  if (stepIndex === "01") {
+    return (
+      <div className={`${styles.workflowVisualFrame} ${styles.workflowVisualFrameInstall}`} aria-hidden="true">
+        <div className={styles.workflowVisualChrome}>
+          <span />
+          <span />
+          <span />
+          <strong>desktop install + agent ready</strong>
+        </div>
+        <div className={styles.workflowVisualCanvas}>
+          <div className={styles.workflowInstallDock}>
+            <div className={styles.workflowInstallApp}>
+              <span className={styles.workflowInstallPulse} />
+              <span>tokeIT.app</span>
+            </div>
+            <div className={styles.workflowInstallStatus}>tracking automatically</div>
+          </div>
+          <div className={styles.workflowInstallProviders}>
+            {["Claude Code", "Cursor", "Copilot", "Codex", "Gemini"].map((tool) => (
+              <span key={tool}>{tool}</span>
+            ))}
+          </div>
+          <div className={styles.workflowInstallBars}>
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (stepIndex === "02") {
+    return (
+      <div className={`${styles.workflowVisualFrame} ${styles.workflowVisualFrameMeasured}`} aria-hidden="true">
+        <div className={styles.workflowVisualChrome}>
+          <span />
+          <span />
+          <span />
+          <strong>session measured automatically</strong>
+        </div>
+        <div className={styles.workflowVisualCanvas}>
+          <div className={styles.workflowMetricGrid}>
+            <div className={styles.workflowMetricTile}>
+              <small>tokens</small>
+              <strong>42.8k</strong>
+            </div>
+            <div className={styles.workflowMetricTile}>
+              <small>cost</small>
+              <strong>$12.84</strong>
+            </div>
+            <div className={styles.workflowMetricTile}>
+              <small>commits</small>
+              <strong>3</strong>
+            </div>
+            <div className={styles.workflowMetricTile}>
+              <small>score</small>
+              <strong>82</strong>
+            </div>
+          </div>
+          <div className={styles.workflowOutcomeRail}>
+            <span>git activity linked</span>
+            <span>lines changed +418 / -96</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`${styles.workflowVisualFrame} ${styles.workflowVisualFrameDashboard}`} aria-hidden="true">
+      <div className={styles.workflowVisualChrome}>
+        <span />
+        <span />
+        <span />
+        <strong>dashboard + coaching view</strong>
+      </div>
+      <div className={styles.workflowVisualCanvas}>
+        <div className={styles.workflowHeatmap}>
+          {Array.from({ length: 35 }).map((_, index) => (
+            <span key={index} />
+          ))}
+        </div>
+        <div className={styles.workflowInsightStack}>
+          <div className={styles.workflowInsightCard}>
+            <small>insight</small>
+            <strong>Retry rate is costing you spend.</strong>
+          </div>
+          <div className={styles.workflowInsightCardMuted}>
+            <small>next move</small>
+            <span>Tighten prompts and reuse context windows.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function MarketingPage() {
-  const { brand, nav, headerActions, hero, product, workflow, score, teams, privacy, cta, footer } =
-    marketingContent;
+  const {
+    brand,
+    nav,
+    headerActions,
+    hero,
+    story,
+    providerView,
+    showcase,
+    bridge,
+    teamIntel,
+    privacy,
+    workflow,
+    footer,
+  } = marketingContent;
 
   const currentYear = new Date().getFullYear();
 
@@ -163,13 +291,10 @@ export function MarketingPage() {
             </nav>
 
             <div className={styles.navActions}>
-              <a className={`${styles.button} ${styles.buttonGhost}`} href={headerActions.contact.href}>
+              <a className={styles.navActionLink} href={headerActions.contact.href}>
                 {headerActions.contact.label}
               </a>
-              <ActionLink
-                action={headerActions.signup}
-                className={`${styles.button} ${styles.buttonSolid}`}
-              />
+              <ActionLink action={headerActions.signup} className={styles.navActionLink} />
             </div>
           </div>
         </div>
@@ -189,22 +314,26 @@ export function MarketingPage() {
           </div>
           <div className={styles.heroStatementWrap}>
             <p className={styles.heroStatement} data-hero-copy>
-              Local-first AI coding performance intelligence for developers and teams.
+              {hero.title}
             </p>
           </div>
           <div className={styles.heroActionsWrap}>
             <div className={styles.heroActions} data-hero-actions>
-              <a
-                className={`${styles.button} ${styles.heroButtonLight}`}
-                href={hero.primaryAction.href}
-              >
-                <span>Download</span>
-                <AppleLogo />
-              </a>
-              <ActionLink
-                action={hero.secondaryAction}
-                className={`${styles.button} ${styles.heroButtonDark}`}
-              />
+              <ActionLink action={hero.primaryAction} className={`${styles.button} ${styles.heroButtonLight}`} />
+              <ActionLink action={hero.secondaryAction} className={`${styles.button} ${styles.heroButtonDark}`} />
+            </div>
+          </div>
+          <div className={styles.heroMeta}>
+            <p className={styles.heroSubtitle}>{hero.subtitle}</p>
+            <div className={styles.trustStrip}>
+              <span className={styles.trustLabel}>Trusted by</span>
+              <div className={styles.trustItems}>
+                {hero.trustItems.map((item) => (
+                  <span key={item} className={styles.trustItem}>
+                    {item}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -219,40 +348,27 @@ export function MarketingPage() {
 
             <div className={styles.storyGrid}>
               <div className={styles.storyCopy} data-reveal>
-                <h1 className={styles.storyTitle}>
-                 tokeIT let you track your token usage and become 
-                  <br />
-                 <span className={styles.storyTitleFade}>more productive</span>
-                </h1>
-                <p className={styles.storyText}>
-                  From solo developers to engineering teams, tokeIT tracks tokens, cost, time, commits,
-                  and efficiency so your AI workflow becomes visible, measurable, and easier to improve.
-                </p>
+                <h1 className={styles.storyTitle}>{story.title}</h1>
+                <p className={styles.storyText}>{story.description}</p>
 
                 <div className={styles.storyActions}>
                   <ActionLink
-                    action={cta.primaryAction}
-                    className={`${styles.button} ${styles.buttonSolid} ${styles.buttonLarge}`}
+                    action={story.primaryAction}
+                    className={`${styles.storyActionLink} ${styles.storyActionLinkSolid}`}
                   />
                   <ActionLink
-                    action={cta.secondaryAction}
-                    className={`${styles.button} ${styles.buttonOutline} ${styles.buttonLarge}`}
+                    action={story.secondaryAction}
+                    className={`${styles.storyActionLink} ${styles.storyActionLinkOutline}`}
                   />
                 </div>
 
                 <div className={styles.storyMetricRow}>
-                  <div className={styles.storyMetric}>
-                    <span>tracked tools</span>
-                    <strong>6+</strong>
-                  </div>
-                  <div className={styles.storyMetric}>
-                    <span>session mode</span>
-                    <strong>automatic</strong>
-                  </div>
-                  <div className={styles.storyMetric}>
-                    <span>team view</span>
-                    <strong>opt-in</strong>
-                  </div>
+                  {story.metrics.map((item) => (
+                    <div key={item.label} className={styles.storyMetric}>
+                      <span>{item.label}</span>
+                      <strong>{item.value}</strong>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -274,41 +390,26 @@ export function MarketingPage() {
                     </div>
                     <div className={styles.storyDemoCopy}>
                       <strong>PLAY PRODUCT TOUR · 01:21</strong>
-                      <p>A real session shows how tokeIT tracks tokens, commits, and efficiency.</p>
                     </div>
                   </div>
 
                   <div className={styles.storyPanelVisual}>
-                    <div className={styles.storyVideoFrame}>
-                      <Image
-                        alt={product.cards[0].media.alt}
-                        fill
-                        sizes="(max-width: 1100px) 100vw, 720px"
-                        src={product.cards[0].media.src}
-                      />
-                    </div>
+                    <MediaPlaceholder suggestion={story.videoSuggestion} mode="presentation" />
                   </div>
 
                   <div className={styles.storyPanelStats}>
-                    <div className={styles.storyPanelStat}>
-                      <span>commits</span>
-                      <strong>3</strong>
-                    </div>
-                    <div className={styles.storyPanelStat}>
-                      <span>model</span>
-                      <strong>claude-3.7</strong>
-                    </div>
-                    <div className={styles.storyPanelStat}>
-                      <span>status</span>
-                      <strong>tracked</strong>
-                    </div>
+                    {story.panelStats.map((item) => (
+                      <div key={item.label} className={styles.storyPanelStat}>
+                        <span>{item.label}</span>
+                        <strong>{item.value}</strong>
+                      </div>
+                    ))}
                   </div>
 
                   <div className={styles.storyPanelFooter}>
-                    <span>tokens</span>
-                    <span>commits</span>
-                    <span>efficiency</span>
-                    <span>insights</span>
+                    {story.panelFooter.map((item) => (
+                      <span key={item}>{item}</span>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -316,144 +417,196 @@ export function MarketingPage() {
           </div>
         </section>
 
-        <section className={`${styles.section} ${styles.surfaceSection}`} id="workflow" data-workflow>
+        <section className={`${styles.section} ${styles.providerSection}`} id="platform">
           <div className={styles.container}>
-            <SectionRail index="02" label="two surfaces" meta="dashboard · terminal" />
+            <SectionRail
+              index="02"
+              label="platform"
+              meta="developer-ready · team-ready"
+            />
 
-            <div className={styles.surfaceGrid}>
-              <div className={styles.surfaceIntro} data-reveal>
-                <h2 className={styles.sectionTitle}>One product, two surfaces, zero friction.</h2>
-                <p className={styles.sectionText}>
-                  The desktop app gives developers and leads a clear visual dashboard. The CLI keeps
-                  the workflow close to the terminal. Both run on the same session intelligence.
-                </p>
+            <div className={styles.providerGrid}>
+              <div className={styles.providerCopy} data-reveal>
+                <h2 className={styles.sectionTitleWide}>{providerView.title}</h2>
+                <p className={styles.sectionText}>{providerView.description}</p>
+                <div className={styles.providerBadgeRow}>
+                  {providerView.callouts.map((callout) => (
+                    <div key={callout.title} className={styles.providerBadge}>
+                      <strong>{callout.title}</strong>
+                      <p>{callout.body}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className={styles.surfaceCards}>
-                <article className={styles.surfaceCard} data-workflow-primary>
-                  <div className={styles.surfaceCardHeader}>
-                    <span>desktop app</span>
-                    <span>analytics + coaching</span>
-                  </div>
-                  <div className={styles.surfaceCardMedia}>
-                    <Image
-                      alt={workflow.stack.primary.alt}
-                      fill
-                      sizes="(max-width: 1100px) 100vw, 48vw"
-                      src={workflow.stack.primary.src}
-                    />
-                  </div>
-                  <div className={styles.surfaceCardBody}>
-                    <h3>See the full performance layer.</h3>
-                    <p>
-                      Time, tokens, cost, commits, score, heatmaps, and coaching are presented in one
-                      view that feels operational instead of decorative.
-                    </p>
-                  </div>
-                </article>
+              <div className={styles.providerVisual} data-reveal>
+                <MediaPlaceholder suggestion={providerView.mediaSuggestion} />
+              </div>
+            </div>
+          </div>
+        </section>
 
-                <article className={styles.surfaceCard} data-workflow-secondary>
-                  <div className={styles.surfaceCardHeader}>
-                    <span>cli</span>
-                    <span>install once</span>
+        <section className={`${styles.section} ${styles.workflowSection}`} id="workflow">
+          <div className={styles.container}>
+            <SectionRail
+              index="03"
+              label="how it works"
+              meta="install · measure · improve"
+            />
+
+            <div className={styles.workflowIntro}>
+              <div className={styles.workflowIntroLead} data-reveal>
+                <h2 className={styles.sectionTitleWide}>{workflow.title}</h2>
+              </div>
+
+              <div className={styles.workflowIntroSupport} data-reveal>
+                <p className={styles.sectionText}>{workflow.description}</p>
+                <div className={styles.workflowProofRow}>
+                  {workflow.proof.map((item) => (
+                    <span key={item} className={styles.workflowProofBadge}>
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.workflowShell} data-reveal>
+              {workflow.steps.map((step) => (
+                <article key={step.index} className={styles.workflowMoment} data-card-pop>
+                  <div className={styles.workflowMomentMarker} aria-hidden="true">
+                    <span className={styles.workflowMomentDot} />
                   </div>
-                  <div className={styles.surfaceCardMedia}>
-                    <Image
-                      alt={workflow.stack.secondary.alt}
-                      fill
-                      sizes="(max-width: 1100px) 100vw, 48vw"
-                      src={workflow.stack.secondary.src}
-                    />
-                  </div>
-                  <div className={styles.surfaceCardBody}>
-                    <h3>Keep the workflow exactly where you already work.</h3>
-                    <ul className={styles.surfaceFeatureList}>
-                      {workflow.steps.map((step) => (
-                        <li key={step.index}>{step.title}</li>
+
+                  <div className={styles.workflowMomentCopy}>
+                    <div className={styles.workflowMomentMeta}>
+                      <span className={styles.workflowStepIndex}>{step.index}</span>
+                      <code className={styles.workflowCommand}>{step.command}</code>
+                    </div>
+                    <h3>{step.title}</h3>
+                    <p>{step.body}</p>
+                    <ul className={styles.workflowPointList}>
+                      {step.points.map((point) => (
+                        <li key={point}>{point}</li>
                       ))}
                     </ul>
                   </div>
-                </article>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        <section className={`${styles.section} ${styles.visibilitySection}`}>
-          <div className={styles.container}>
-            <SectionRail index="03" label="visibility" meta="time · tokens · cost · commits" />
-
-            <div className={styles.visibilityBoard} data-reveal>
-              <div className={styles.visibilityBoardMain}>
-                <span className={styles.visibilityDisplayLabel}>signature readout</span>
-                <div className={styles.visibilityDisplay}>time + tokens + cost + commits</div>
-                <p className={styles.visibilityText}>
-                  The product connects effort to outcomes, which is what makes the data useful. You
-                  can finally answer what a feature cost, which model was efficient, and whether the
-                  work actually shipped.
-                </p>
-              </div>
-
-              <div className={styles.visibilityBoardAside}>
-                <div className={styles.visibilityBoardImage}>
-                  <Image
-                    alt={score.media.alt}
-                    fill
-                    sizes="(max-width: 1100px) 100vw, 560px"
-                    src={score.media.src}
-                  />
-                </div>
-              </div>
-
-              <div className={styles.visibilityStats}>
-                {visibilityStats.map((stat) => (
-                  <div key={stat.label} className={styles.visibilityStat} data-card-pop>
-                    <strong>{stat.value}</strong>
-                    <span>{stat.label}</span>
+                  <div className={styles.workflowMomentVisual}>
+                    <WorkflowVisual stepIndex={step.index} />
                   </div>
-                ))}
-              </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
 
-              <div className={styles.visibilityUseCases}>
-                {visibilityUseCases.map((item) => (
-                  <span key={item} className={styles.visibilityUseCase}>
-                    {item}
-                  </span>
-                ))}
+        <section className={`${styles.section} ${styles.showcaseSection}`} data-showcase-section>
+          <div className={styles.container}>
+            <SectionRail
+              index="04"
+              label="product layers"
+              meta="scroll-synced showcase · scrubbed"
+            />
+            <div className={styles.showcaseIntro} data-reveal>
+              <h2 className={styles.sectionTitleWide}>{showcase.title}</h2>
+              <p className={styles.sectionText}>{showcase.description}</p>
+            </div>
+          </div>
+
+          <div className={styles.showcasePinnedScene} data-showcase-pin>
+            <div className={styles.showcaseDepthBack} data-showcase-depth-back aria-hidden="true" />
+            <div className={styles.showcaseDepthMid} data-showcase-depth-mid aria-hidden="true" />
+            <div className={styles.showcaseDepthFront} data-showcase-depth-front aria-hidden="true" />
+
+            <div className={styles.showcaseStageFrame}>
+              <div className={styles.showcaseStage} data-showcase-stage>
+                <div className={styles.showcaseSlides}>
+                  {showcase.layers.map((layer, index) => (
+                    <article key={layer.title} className={styles.showcaseSlide} data-showcase-slide>
+                      <div className={styles.showcaseSlideSurface}>
+                        <MediaPlaceholder suggestion={layer.suggestion} />
+                      </div>
+                      <div className={styles.showcaseSlideContent}>
+                        <span className={styles.showcaseLayerLabel}>{`0${index + 1} · ${layer.label}`}</span>
+                        <h3>{layer.title}</h3>
+                        <p>{layer.body}</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+
+                <div className={styles.showcaseLayerRail}>
+                  {showcase.layers.map((layer, index) => (
+                    <span key={layer.title} className={styles.showcaseLayerRailItem} data-showcase-rail-item>
+                      {`0${index + 1} ${layer.label}`}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className={`${styles.section} ${styles.teamSection}`} id="teams">
+        <section className={`${styles.section} ${styles.bridgeSection}`}>
           <div className={styles.container}>
-            <SectionRail index="04" label="scale" meta="individuals · teams" />
+            <SectionRail
+              index="05"
+              label="individuals to teams"
+              meta="start solo · scale later"
+            />
 
-            <div className={styles.teamGrid}>
-              <div className={styles.teamIntro} data-reveal>
-                <h2 className={styles.sectionTitle}>Scale from solo improvement to team visibility.</h2>
-                <p className={styles.sectionText}>
-                  Start with personal measurement. Expand to team-level visibility only when you need
-                  it. That keeps the product sharp for developers while still useful for engineering
-                  leads.
-                </p>
+            <div className={styles.bridgeIntro} data-reveal>
+              <h2 className={styles.sectionTitleWide}>{bridge.title}</h2>
+              <p className={styles.sectionText}>{bridge.description}</p>
+            </div>
+
+            <div className={styles.bridgeGrid}>
+              <article className={styles.bridgeCard} data-card-pop>
+                <span className={styles.bridgeCardLabel}>solo</span>
+                <h3>{bridge.solo.title}</h3>
+                <ul>
+                  {bridge.solo.bullets.map((bullet) => (
+                    <li key={bullet}>{bullet}</li>
+                  ))}
+                </ul>
+              </article>
+
+              <article className={styles.bridgeCard} data-card-pop>
+                <span className={styles.bridgeCardLabel}>team</span>
+                <h3>{bridge.team.title}</h3>
+                <ul>
+                  {bridge.team.bullets.map((bullet) => (
+                    <li key={bullet}>{bullet}</li>
+                  ))}
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section className={`${styles.section} ${styles.teamIntelSection}`}>
+          <div className={styles.container}>
+            <SectionRail
+              index="06"
+              label="team intelligence"
+              meta="leaderboard · projects · trend analysis"
+            />
+
+            <div className={styles.teamIntelGrid}>
+              <div className={styles.teamIntelVisual} data-reveal>
+                <MediaPlaceholder suggestion={teamIntel.mediaSuggestion} />
               </div>
 
-              <div className={styles.teamPanel} data-reveal>
-                <div className={styles.teamPanelImage}>
-                  <Image
-                    alt={teams.media.primary.alt}
-                    fill
-                    sizes="(max-width: 1100px) 100vw, 58vw"
-                    src={teams.media.primary.src}
-                  />
-                </div>
+              <div className={styles.teamIntelCopy} data-reveal>
+                <h2 className={styles.sectionTitleWide}>{teamIntel.title}</h2>
+                <p className={styles.sectionText}>{teamIntel.description}</p>
 
-                <div className={styles.teamPanelNotes}>
-                  {teams.points.map((point) => (
-                    <div key={point.title} className={styles.teamNoteCard} data-card-pop>
-                      <strong>{point.title}</strong>
-                      <p>{point.description}</p>
+                <div className={styles.teamIntelMetrics}>
+                  {teamIntel.metrics.map((metric) => (
+                    <div key={metric.label} className={styles.teamIntelMetric} data-card-pop>
+                      <span>{metric.label}</span>
+                      <strong>{metric.value}</strong>
                     </div>
                   ))}
                 </div>
@@ -464,34 +617,36 @@ export function MarketingPage() {
 
         <section className={`${styles.section} ${styles.privacySection}`} id="privacy">
           <div className={styles.container}>
-            <SectionRail index="05" label="privacy & trust" meta="local-first · private by default" />
+            <SectionRail
+              index="07"
+              label="local-first privacy"
+              meta="raw prompts stay on-device"
+            />
 
-            <div className={styles.privacyGrid}>
+            <div className={styles.privacyShell}>
               <div className={styles.privacyIntro} data-reveal>
-                <h2 className={styles.sectionTitle}>{privacy.title}</h2>
+                <h2 className={styles.sectionTitleWide}>{privacy.title}</h2>
                 <p className={styles.sectionText}>{privacy.description}</p>
               </div>
 
-              <div className={styles.privacyPanel} data-reveal>
-                <div className={styles.privacyBadgeRow}>
-                  {privacyBadges.map((badge) => (
-                    <div key={badge} className={styles.privacyBadge}>
-                      {badge}
-                    </div>
-                  ))}
-                </div>
+              <div className={styles.privacyBadgeRow}>
+                {privacy.badges.map((badge) => (
+                  <div key={badge} className={styles.privacyBadge}>
+                    {badge}
+                  </div>
+                ))}
+              </div>
 
-                <div className={styles.privacyRows}>
-                  {privacyRows.map((row) => (
-                    <div key={row.title} className={styles.privacyRow} data-card-pop>
-                      <div>
-                        <strong>{row.title}</strong>
-                        <p>{row.body}</p>
-                      </div>
-                      <span className={styles.privacyRowMeta}>{row.meta}</span>
+              <div className={styles.privacyRows}>
+                {privacy.rows.map((row) => (
+                  <div key={row.title} className={styles.privacyRow} data-card-pop>
+                    <div>
+                      <strong>{row.title}</strong>
+                      <p>{row.body}</p>
                     </div>
-                  ))}
-                </div>
+                    <span className={styles.privacyRowMeta}>{row.meta}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

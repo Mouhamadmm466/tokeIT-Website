@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://tokeit.ai"),
+  metadataBase: new URL("https://tokeit.dev"),
   title: "tokeIT | AI Coding Performance Intelligence",
   description:
     "tokeIT is a local-first AI coding performance tracker that connects tokens, time, cost, and commits so developers and teams can build faster with less waste.",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     title: "tokeIT | AI Coding Performance Intelligence",
     description:
       "Track AI coding cost, output, and efficiency across Claude, Codex, Cursor, Gemini, and more.",
-    url: "https://tokeit.ai",
+    url: "https://tokeit.dev",
     siteName: "tokeIT",
     type: "website",
   },
