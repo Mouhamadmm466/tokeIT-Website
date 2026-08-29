@@ -1,83 +1,118 @@
-:root {
-  --font-sans:
-    -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
-    "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-display:
-    -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
-    "Helvetica Neue", Helvetica, Arial, sans-serif;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  --sand-50: #fcf8f1;
-  --sand-100: #f7f1e7;
-  --sand-200: #efe5d5;
-  --sand-300: #e2d1b8;
-  --ink-900: #171513;
-  --ink-700: rgba(23, 21, 19, 0.76);
-  --ink-500: rgba(23, 21, 19, 0.54);
-  --line-soft: rgba(23, 21, 19, 0.1);
-  --line-strong: rgba(23, 21, 19, 0.16);
-  --accent: #c96533;
-  --accent-soft: #f2ba8f;
-  --sage: #a8c1a4;
-  --panel-dark: #181715;
-  --panel-dark-2: #24211e;
-  --white-soft: rgba(255, 251, 245, 0.74);
-  --white-strong: rgba(255, 252, 248, 0.9);
-  --shadow-large: 0 28px 90px rgba(79, 51, 29, 0.13);
-  --shadow-medium: 0 16px 40px rgba(79, 51, 29, 0.1);
-  --radius-xl: 36px;
-  --radius-lg: 28px;
-  --radius-md: 20px;
-  --radius-sm: 16px;
-  --container-width: 1200px;
+@layer base {
+  :root {
+    --background: 43 23% 93%;
+    --foreground: 0 0% 4%;
+    --card: 43 23% 93%;
+    --card-foreground: 0 0% 4%;
+    --popover: 43 23% 93%;
+    --popover-foreground: 0 0% 4%;
+    --primary: 0 0% 4%;
+    --primary-foreground: 43 23% 93%;
+    --secondary: 0 0% 90%;
+    --secondary-foreground: 0 0% 4%;
+    --muted: 40 10% 85%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 20 90% 45%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 75%;
+    --input: 0 0% 75%;
+    --ring: 0 0% 4%;
+    --radius: 0rem;
+
+    /* The single hot colour. Matches #ea580c exactly. */
+    --signal: 20.5 90% 48%;
+    /* Text/icons sitting ON the orange. Near-black clears AA (5.6:1); cream does not. */
+    --signal-ink: 0 0% 4%;
+    /* Orange for TEXT on an inverted (bg-foreground) panel. The panel flips with the
+       theme, so this darkens in dark mode to stay above 4.5:1 on the cream fill. */
+    --signal-inv: 20.5 90% 48%;
+    --dot-grid: #c4c2b8;
+  }
+
+  .dark {
+    --background: 0 0% 6%;
+    --foreground: 43 23% 93%;
+    --card: 0 0% 8%;
+    --card-foreground: 43 23% 93%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 43 23% 93%;
+    --primary: 43 23% 93%;
+    --primary-foreground: 0 0% 6%;
+    --secondary: 0 0% 14%;
+    --secondary-foreground: 43 23% 93%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 20 90% 50%;
+    --accent-foreground: 0 0% 100%;
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
+    --ring: 43 23% 93%;
+
+    --signal-inv: 20.5 90% 38%;
+    --dot-grid: #333333;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-mono antialiased;
+    /* Entrance transforms translate elements a few px past the right edge before
+       they scroll into view. Nothing here is sticky, so clipping the axis is safe. */
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: hsl(var(--signal));
+    color: hsl(var(--signal-ink));
+  }
+
+  /* Brutalism has no soft edges. Kill every default radius. */
+  * {
+    border-radius: 0 !important;
+  }
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+@layer utilities {
+  .dot-grid-bg {
+    background-image: radial-gradient(circle, var(--dot-grid) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: var(--font-sans);
-  background:
-    radial-gradient(circle at top left, rgba(242, 186, 143, 0.18), transparent 28%),
-    radial-gradient(circle at top right, rgba(168, 193, 164, 0.16), transparent 30%),
-    var(--sand-100);
-  color: var(--ink-900);
-  text-rendering: optimizeLegibility;
-  overflow-x: hidden;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
-
-img {
-  display: block;
-  max-width: 100%;
-}
-
-::selection {
-  background: rgba(201, 101, 51, 0.18);
-  color: var(--ink-900);
+  /* Hairline scanline wash for inverted panels. Uses the background token so it
+     inverts with the fill instead of vanishing in dark mode. */
+  .scanlines {
+    background-image: repeating-linear-gradient(
+      0deg,
+      hsl(var(--background) / 0.04) 0px,
+      hsl(var(--background) / 0.04) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }

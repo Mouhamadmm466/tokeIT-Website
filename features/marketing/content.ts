@@ -1,339 +1,282 @@
-export type MarketingLink = {
-  href: string;
-  label: string;
+/**
+ * Every string on the marketing page lives here.
+ * Voice rules: system output, not marketing prose. Identifiers are filenames,
+ * labels are SCREAMING_SNAKE_CASE, sentences are declarative and short.
+ */
+
+export type NavLink = { href: string; label: string };
+
+export type ProviderRow = { name: string; status: "ONLINE" | "IDLE" | "SYNCING"; value: string };
+
+export type TerminalLine = { text: string; tone: "signal" | "dim" | "bright" };
+
+export const nav: NavLink[] = [
+  { href: "#capture", label: "Platform" },
+  { href: "#coaching", label: "Insights" },
+  { href: "#privacy", label: "Privacy" },
+  { href: "#pricing", label: "Pricing" },
+];
+
+export const hero = {
+  lineOne: "TRACK. MEASURE.",
+  lineTwo: "IMPROVE.",
+  body: "tokeIT is the local-first measurement layer for AI-assisted engineering. Every session priced, every commit attributed, every habit scored. Nothing leaves your machine unless you say so.",
+  cta: { label: "Download for macOS", href: "mailto:hello@tokeit.dev?subject=Download%20tokeIT%20for%20macOS" },
 };
 
-export type MarketingAction = MarketingLink & {
-  variant: "solid" | "outline" | "ghost";
-};
-
-export type MarketingIconLink = MarketingLink & {
-  icon: "x" | "github" | "instagram";
-};
-
-export type PlaceholderSuggestion = {
-  label: string;
-  format: string;
-  recommendation: string;
-};
-
-type MediaAsset = {
-  alt: string;
-  src: string;
-};
-
-export const marketingContent = {
-  brand: "tokeIT",
-  nav: [
-    { href: "#top", label: "Home" },
-    { href: "#workflow", label: "How it works" },
-    { href: "#privacy", label: "Privacy" },
-  ] satisfies MarketingLink[],
-  headerActions: {
-    contact: {
-      href: "mailto:hello@tokeit.ai?subject=Talk%20to%20sales",
-      label: "Talk to sales",
-    } satisfies MarketingLink,
-    signup: {
-      href: "mailto:hello@tokeit.ai?subject=Start%20for%20free",
-      label: "Start for free",
-      variant: "solid",
-    } satisfies MarketingAction,
+export const capture = {
+  marker: "// SECTION: LIVE_CAPTURE",
+  index: "001",
+  terminal: {
+    title: "capture.sys",
+    lines: [
+      { text: "$ tokeit daemon --watch", tone: "bright" },
+      { text: "[ok] agent attached to 5 log sources", tone: "dim" },
+      { text: "[..] claude-code   ~/.claude/projects", tone: "dim" },
+      { text: "[..] cursor        ~/Library/Cursor", tone: "dim" },
+      { text: "[..] codex-cli     ~/.codex/sessions", tone: "dim" },
+      { text: "", tone: "dim" },
+      { text: "> session 8f21ac closed", tone: "signal" },
+      { text: "  model      claude-opus-4", tone: "dim" },
+      { text: "  tokens     in 18.2k / out 4.9k / cache 61.4k", tone: "dim" },
+      { text: "  duration   00:22:41", tone: "dim" },
+      { text: "  git        3 commits / +412 -87", tone: "dim" },
+      { text: "  cost       $1.84", tone: "bright" },
+      { text: "  efficiency 87 / 100", tone: "signal" },
+      { text: "", tone: "dim" },
+      { text: "[ok] written to local store. 0 bytes uploaded.", tone: "dim" },
+    ] satisfies TerminalLine[],
   },
-  hero: {
-    title: "Measure AI coding spend, tokens, and efficiency across every session.",
-    subtitle: "Local-first AI coding performance intelligence for developers and teams.",
-    trustItems: ["Developer teams", "Open source workflows", "Engineering leaders", "Product squads"],
-    primaryAction: {
-      href: "mailto:hello@tokeit.ai?subject=Start%20for%20free",
-      label: "Start for free",
-      variant: "solid",
-    } satisfies MarketingAction,
-    secondaryAction: {
-      href: "mailto:hello@tokeit.ai?subject=Talk%20to%20sales",
-      label: "Talk to sales",
-      variant: "outline",
-    } satisfies MarketingAction,
-    backdrop: {
-      src: "/images/m.gif",
-      alt: "Animated tokeIT data field background",
-    } satisfies MediaAsset,
-  },
-  story: {
-    title: "Measure AI coding cost, tokens, output, and team efficiency in one local-first product.",
-    description:
-      "tokeIT brings every AI coding session into one dashboard so developers and teams can see what they spent, what changed, and what to improve next.",
-    primaryAction: {
-      href: "mailto:hello@tokeit.ai?subject=Start%20for%20free",
-      label: "Start for free",
-      variant: "solid",
-    } satisfies MarketingAction,
-    secondaryAction: {
-      href: "mailto:hello@tokeit.ai?subject=Talk%20to%20sales",
-      label: "Talk to sales",
-      variant: "outline",
-    } satisfies MarketingAction,
-    metrics: [
-      { label: "tools tracked", value: "6+" },
-      { label: "sessions auto-captured", value: "100%" },
-      { label: "privacy-first", value: "local-by-default" },
-    ],
-    panelStats: [
-      { label: "tokens", value: "42.8k" },
-      { label: "cost", value: "$12.84" },
-      { label: "efficiency", value: "82" },
-    ],
-    panelFooter: ["tokens", "cost", "commits", "insights"],
-    videoSuggestion: {
-      label: "Show the tokeIT dashboard in action",
-      format: "Short screen recording",
-      recommendation:
-        "Use a 60-90 second desktop walkthrough showing a live session, token cost, and the coaching recommendation that makes the data useful.",
-    } satisfies PlaceholderSuggestion,
-  },
-  providerView: {
-    title: "One view across every AI tool your team already uses.",
-    description:
-      "tokeIT brings Claude Code, Codex CLI, Cursor, Gemini, Copilot, and others into one performance layer so developers stop jumping between fragmented logs and token counters.",
-    providers: ["Claude Code", "OpenAI Codex", "Cursor", "Gemini CLI", "Copilot", "More"],
-    callouts: [
-      {
-        title: "Unified sessions",
-        body: "See every provider through the same session model, cost model, and output model.",
-      },
-      {
-        title: "Model-level filters",
-        body: "Compare Sonnet, GPT, Gemini, and custom models without leaving the same dashboard.",
-      },
-      {
-        title: "No workflow migration",
-        body: "Keep using your preferred tools. tokeIT sits underneath them rather than replacing them.",
-      },
-    ],
-    mediaSuggestion: {
-      label: "Add a unified dashboard screenshot",
-      format: "16:10 desktop screenshot",
-      recommendation:
-        "Show the same week filtered across three providers with visible cost, tokens, commits, and a model breakdown in one frame.",
-    } satisfies PlaceholderSuggestion,
-  },
-  showcase: {
-    title: "The product layer should reveal itself as you scroll.",
-    description:
-      "Keep the title outside the motion. The animation itself should feel like one full product view opening layer by layer: capture, context, outcome metrics, and coaching.",
-    stageSuggestion: {
-      label: "Add a full product showcase screenshot",
-      format: "Full-page desktop capture",
-      recommendation:
-        "Use one polished full dashboard screenshot here with strong hierarchy: top summary, session stream, provider filters, and outcome metrics visible at once.",
-    } satisfies PlaceholderSuggestion,
-    layers: [
-      {
-        label: "capture layer",
-        title: "Sessions, providers, and token buckets appear first.",
-        body: "This layer should show the raw intake the product understands automatically across tools.",
-        suggestion: {
-          label: "Add a session intake screenshot",
-          format: "Full-page product capture",
-          recommendation:
-            "Show a real capture-first view with provider, model, token buckets, session timing, and project path visible in one clean screen.",
-        } satisfies PlaceholderSuggestion,
-      },
-      {
-        label: "context layer",
-        title: "Then the work gets connected to time, models, and git activity.",
-        body: "Show how a session becomes meaningful once project context and commit signals are attached.",
-        suggestion: {
-          label: "Add a context-linked analytics screenshot",
-          format: "Full-page product capture",
-          recommendation:
-            "Show a session expanded with git activity, files changed, duration, and model context so the product feels operational, not abstract.",
-        } satisfies PlaceholderSuggestion,
-      },
-      {
-        label: "outcome layer",
-        title: "Then the product makes performance legible.",
-        body: "Surface cost per commit, efficiency score, retries, and tracked output in one operational frame.",
-        suggestion: {
-          label: "Add an outcome metrics screenshot",
-          format: "Full-page product capture",
-          recommendation:
-            "Best version: one screen with efficiency score, cost per commit, tracked commits, and a compact trend comparison against baseline.",
-        } satisfies PlaceholderSuggestion,
-      },
-      {
-        label: "coaching layer",
-        title: "Finally the product points to what to improve next.",
-        body: "The last layer should feel like calm, high-signal coaching rather than another dashboard widget.",
-        suggestion: {
-          label: "Add a coaching and insights screenshot",
-          format: "Full-page product capture",
-          recommendation:
-            "Show the insights feed with one expanded recommendation, estimated savings, and enough surrounding UI that it feels like a finished product page.",
-        } satisfies PlaceholderSuggestion,
-      },
+  dither: { title: "token_field.dither", meta: "320x240" },
+  metrics: {
+    title: "session.metrics",
+    // `display` is the literal target string. Digits tumble; everything else is fixed,
+    // so the rendered width never changes and the panel cannot reflow mid-animation.
+    items: [
+      { label: "Tokens today", display: "84.6K" },
+      { label: "Spend today", display: "$12.84" },
+      { label: "Efficiency score", display: "87" },
+      { label: "Commits tracked", display: "214" },
     ],
   },
-  coaching: {
-    title: "Coaching, not just tracking.",
-    description:
-      "tokeIT should feel like a serious performance layer: specific, calm, and actionable. This is where the product stops being a dashboard and starts becoming a tool developers trust.",
-    insights: [
-      {
-        title: "Cache hit rate dropped to 23%",
-        body: "You are likely resending context each turn instead of building on prior state. Tighten prompts and reuse context windows more intentionally.",
-      },
-      {
-        title: "Last 4 sessions on this feature had no tracked commits",
-        body: "That usually means the task was not scoped cleanly enough, or the work is happening outside a measurable output loop.",
-      },
-      {
-        title: "Prompt retry rate is 40%",
-        body: "Your first instruction is not constraining enough. Better upfront context should reduce retries and lower spend.",
-      },
-    ],
-    mediaSuggestion: {
-      label: "Add an insights screen",
-      format: "Desktop screenshot or short video",
-      recommendation:
-        "Best option: a real insights page with one expanded recommendation, an estimated savings value, and a small trend sparkline.",
-    } satisfies PlaceholderSuggestion,
-  },
-  bridge: {
-    title: "Built for individuals first. Ready for teams when the work grows.",
-    description:
-      "The site should make it clear that the product stays sharp for individual developers while still expanding into team visibility later.",
-    solo: {
-      title: "For individual developers",
-      bullets: [
-        "Track what each session actually cost.",
-        "See whether your prompting is getting better.",
-        "Compare models against your own workflow instead of generic benchmarks.",
-      ],
-    },
-    team: {
-      title: "For engineering teams",
-      bullets: [
-        "See where AI spend is concentrated across people and projects.",
-        "Spot efficient workflows worth copying across the team.",
-        "Create visibility without exposing private session content.",
-      ],
-    },
-  },
-  teamIntel: {
-    title: "Team intelligence that feels operational, not performative.",
-    description:
-      "Leaderboards, per-project tracking, and coaching opportunities belong in one clear admin view. The product should feel like a serious engineering instrument, not gamified surveillance.",
-    metrics: [
-      { label: "team spend", value: "$1,284" },
-      { label: "avg efficiency", value: "79" },
-      { label: "projects tracked", value: "12" },
-      { label: "members active", value: "8" },
-    ],
-    mediaSuggestion: {
-      label: "Add a team analytics screenshot",
-      format: "Wide admin dashboard screenshot",
-      recommendation:
-        "Show the leaderboard, a team trend chart, and a project breakdown in one composed admin screen. That will make the team story feel real immediately.",
-    } satisfies PlaceholderSuggestion,
-  },
-  privacy: {
-    title: "Local-first by default. Useful for teams only when people opt in.",
-    description:
-      "The privacy story should feel calm and confident: local storage first, sync only when enabled, private coaching kept private, and shared team analytics scoped to what managers actually need.",
-    badges: ["Local-first", "Opt-in sync", "Private coaching", "Metrics-only team view"],
+  providers: {
+    title: "providers.status",
     rows: [
-      {
-        title: "Raw prompt content stays on-device",
-        body: "The product is built so the sensitive layer remains local unless the user intentionally connects a sync account.",
-        meta: "device local",
-      },
-      {
-        title: "Team analytics expose performance, not private notes",
-        body: "Members can compare shared metrics without exposing session content, private coaching text, or raw prompts.",
-        meta: "scoped sharing",
-      },
-      {
-        title: "Cloud sync exists for collaboration, not surveillance",
-        body: "The shared layer is there to support teams and projects, not to mirror every interaction a developer has with AI.",
-        meta: "opt-in only",
-      },
-    ],
+      { name: "CLAUDE-CODE", status: "ONLINE", value: "38.2K" },
+      { name: "CURSOR", status: "ONLINE", value: "21.7K" },
+      { name: "CODEX-CLI", status: "ONLINE", value: "14.1K" },
+      { name: "COPILOT", status: "IDLE", value: "10.6K" },
+    ] satisfies ProviderRow[],
+    barLabel: "Cache hit rate",
+    barValue: 73,
   },
-  workflow: {
-    title: "Install once. Every session gets measured. Open the dashboard and get smarter.",
-    description:
-      "tokeIT should feel frictionless: one install, silent capture in the background, and a desktop view that turns raw sessions into useful performance feedback.",
-    proof: [
-      "Auto-tracking, zero friction",
-      "Claude Code · Cursor · Copilot · Codex · Gemini",
-      "Raw session content stays local",
-    ],
-    steps: [
-      {
-        index: "01",
-        title: "Install once, it tracks everything",
-        body: "Install the desktop app and the background agent starts watching the AI tool logs already written to disk. No API keys, no timers, no manual start buttons.",
-        command: "tokeIT.app + background agent",
-        points: ["Runs silently in the background", "Starts with Claude Code, Cursor, Copilot, Codex", "No manual start or stop"],
-      },
-      {
-        index: "02",
-        title: "Every session gets measured",
-        body: "When a session ends, tokeIT captures the token breakdown, total cost, duration, git output, and an efficiency score that weighs all of it together.",
-        command: "Tokens · cost · time · commits · score",
-        points: ["Input / output / cache tokens", "Exact dollar cost", "Commits, lines changed, efficiency 0-100"],
-      },
-      {
-        index: "03",
-        title: "Open the dashboard, get smarter",
-        body: "The desktop app shows your trends, highlights waste, and gives coaching on which habits are costing you money and what your best sessions have in common.",
-        command: "Stats · trends · insights · coaching",
-        points: ["Cost dashboard and token heatmap", "Insights engine for wasted sessions", "AI coaching based on your real data"],
-      },
-    ],
-  },
-  footer: {
-    ctaSubtitle: "Start tracking tokens, cost, commits, and efficiency on your next project today.",
-    ctaAction: {
-      href: "mailto:hello@tokeit.ai?subject=Start%20for%20free",
-      label: "Get started",
-      variant: "solid",
-    } satisfies MarketingAction,
-    status: "All systems operational",
-    columns: [
-      {
-        title: "Resources",
-        links: [
-          { href: "#top", label: "Home" },
-          { href: "#workflow", label: "How it works" },
-          { href: "mailto:hello@tokeit.ai?subject=Download%20tokeIT%20for%20macOS", label: "Download" },
-        ],
-      },
-      {
-        title: "Support",
-        links: [
-          { href: "mailto:hello@tokeit.ai?subject=Book%20a%20tokeIT%20team%20demo", label: "Book demo" },
-          { href: "mailto:hello@tokeit.ai", label: "Contact" },
-          { href: "mailto:hello@tokeit.ai?subject=Sign%20up%20for%20tokeIT", label: "Sign up" },
-        ],
-      },
-      {
-        title: "Legal",
-        links: [
-          { href: "#privacy", label: "Privacy Policy" },
-          { href: "mailto:hello@tokeit.ai?subject=Terms%20of%20Service", label: "Terms of Service" },
-          { href: "mailto:hello@tokeit.ai?subject=Subprocessors", label: "Subprocessors" },
-        ],
-      },
-    ] satisfies ReadonlyArray<{
-      title: string;
-      links: MarketingLink[];
-    }>,
-    socialLinks: [
-      { href: "https://x.com/tokeIT", label: "X", icon: "x" },
-      { href: "https://github.com/tokeIT", label: "GitHub", icon: "github" },
-      { href: "https://instagram.com/tokeIT", label: "Instagram", icon: "instagram" },
-    ] satisfies MarketingIconLink[],
-  },
-} as const;
+};
+
+export const manifest = {
+  marker: "// SECTION: MANIFEST",
+  index: "002",
+  render: { title: "RENDER: token_topology.obj", cam: "CAM: -45deg / ISO", res: "RES: 2048x2048" },
+  doc: { title: "MANIFEST.md", version: "v1.4.0" },
+  headline: { lead: "Instrumentation for", accent: "raw AI output" },
+  paragraphs: [
+    "AI writes a growing share of the code your team ships, and almost none of it is measured. Spend shows up on a bill weeks late, with no session, no model, and no commit attached to it.",
+    "tokeIT sits underneath the tools you already use and reconstructs the record from logs already on disk. No API keys. No proxy. No wrapper. Just the ledger you were missing.",
+  ],
+  uptimeLabel: "TRACKING_SINCE:",
+  // TODO(tokeIT): set this to the real first-release date — the counter renders it live.
+  trackingSince: "2025-01-15T00:00:00Z",
+  stats: [
+    { label: "TOOLS_TRACKED", value: "6+" },
+    { label: "SETUP_TIME", value: "60s" },
+    { label: "SESSIONS_PARSED", value: "1.2M" },
+    { label: "DATA_UPLOADED", value: "0B" },
+  ],
+};
+
+export const protocol = {
+  marker: "// SECTION: CAPTURE_PROTOCOL",
+  index: "003",
+  headline: "Install once. Everything after that is automatic.",
+  body: "No timers, no start buttons, no instrumenting your prompts. The agent reads what your AI tools already write to disk.",
+  steps: [
+    {
+      id: "01",
+      file: "install.sh",
+      title: "Attach the agent",
+      body: "Install the desktop app. A background agent discovers every AI coding tool on the machine and begins watching their session logs.",
+      points: ["Zero configuration", "No API keys or proxies", "Runs silently, uses no network"],
+    },
+    {
+      id: "02",
+      file: "measure.sys",
+      title: "Every session gets a record",
+      body: "When a session closes, tokeIT reconstructs it: token breakdown, exact cost, wall-clock duration, git output, and a 0-100 efficiency score weighing all of it.",
+      points: ["Input / output / cache split", "Cost priced per model", "Commits, diff size, retries"],
+    },
+    {
+      id: "03",
+      file: "coach.engine",
+      title: "Get told what to fix",
+      body: "The dashboard surfaces where spend is wasted, which habits correlate with your best sessions, and what to change on the next one.",
+      points: ["Waste detection", "Model-vs-model on your own work", "Specific, dated recommendations"],
+    },
+  ],
+};
+
+export const coaching = {
+  marker: "// SECTION: COACHING_ENGINE",
+  index: "004",
+  headline: { lead: "Coaching, not another", accent: "dashboard" },
+  body: "Charts tell you what happened. tokeIT tells you what to do differently. Each finding is derived from your own sessions and carries an estimated cost impact.",
+  insights: [
+    {
+      id: "INS-0431",
+      severity: "HIGH",
+      title: "Cache hit rate fell to 23%",
+      body: "You are resending full context each turn instead of building on prior state. Reuse the window and move fixed instructions out of the loop.",
+      impact: "~$41/mo",
+    },
+    {
+      id: "INS-0429",
+      severity: "MED",
+      title: "4 consecutive sessions produced no commits",
+      body: "Work on this feature is running long without a measurable output boundary. Sessions that end in a commit score 31 points higher on average.",
+      impact: "~$18/mo",
+    },
+    {
+      id: "INS-0424",
+      severity: "HIGH",
+      title: "Prompt retry rate at 40%",
+      body: "First instructions are under-constrained. Sessions where the opening prompt names the target file retry 62% less often.",
+      impact: "~$63/mo",
+    },
+  ],
+};
+
+export const privacy = {
+  marker: "// SECTION: PRIVACY_MODEL",
+  index: "005",
+  headline: { lead: "Local by default.", accent: "Shared only on purpose." },
+  body: "The sensitive layer never moves. Sync is a decision you make, not a default you discover.",
+  badges: ["LOCAL_FIRST", "OPT_IN_SYNC", "METRICS_ONLY", "NO_TELEMETRY"],
+  rows: [
+    {
+      title: "Prompt content stays on device",
+      body: "Raw prompts, completions, and file contents are parsed locally and written to a local store. They are never transmitted, even with sync enabled.",
+      meta: "DEVICE_LOCAL",
+    },
+    {
+      title: "Team views expose metrics, not work",
+      body: "Members compare tokens, cost, and efficiency. Nobody — including admins — can read another member's session content.",
+      meta: "SCOPED_SHARE",
+    },
+    {
+      title: "Sync is collaboration, not surveillance",
+      body: "The shared layer exists so teams can find workflows worth copying. It is off until you turn it on, and revocable after.",
+      meta: "OPT_IN_ONLY",
+    },
+  ],
+};
+
+export const pricing = {
+  marker: "// SECTION: PRICING_TIERS",
+  index: "006",
+  headline: "Select your tier",
+  body: "Every tier tracks unlimited local sessions. You are paying for history depth, coaching, and team visibility — never for capture.",
+  liveLabel: "sessions parsed today:",
+  tiers: [
+    {
+      id: "01",
+      name: "SOLO",
+      price: 0,
+      prefix: "$",
+      period: "/ forever",
+      note: "Full local tracking. 30 days of history. No account required.",
+      cta: "Download free",
+      href: "mailto:hello@tokeit.dev?subject=Download%20tokeIT",
+      featured: false,
+      features: [
+        { label: "Unlimited session capture", included: true },
+        { label: "All supported AI tools", included: true },
+        { label: "30-day history", included: true },
+        { label: "Cost and token dashboard", included: true },
+        { label: "AI coaching engine", included: false },
+        { label: "Team analytics", included: false },
+      ],
+    },
+    {
+      id: "02",
+      name: "PRO",
+      price: 12,
+      prefix: "$",
+      period: "/ month",
+      note: "Unlimited history and the full coaching engine on your own data.",
+      cta: "Start building",
+      href: "mailto:hello@tokeit.dev?subject=Start%20tokeIT%20Pro",
+      featured: true,
+      badge: "RECOMMENDED",
+      features: [
+        { label: "Everything in SOLO", included: true },
+        { label: "Unlimited history", included: true },
+        { label: "AI coaching engine", included: true },
+        { label: "Model-vs-model comparison", included: true },
+        { label: "Optional encrypted sync", included: true },
+        { label: "Team analytics", included: false },
+      ],
+    },
+    {
+      id: "03",
+      name: "TEAM",
+      price: null,
+      period: "",
+      note: "Org-wide visibility. SSO, roles, and per-project attribution.",
+      cta: "Contact sales",
+      href: "mailto:hello@tokeit.dev?subject=tokeIT%20for%20teams",
+      featured: false,
+      features: [
+        { label: "Everything in PRO", included: true },
+        { label: "Team and project rollups", included: true },
+        { label: "Spend attribution by repo", included: true },
+        { label: "SSO and role controls", included: true },
+        { label: "Self-hosted sync option", included: true },
+        { label: "Priority support", included: true },
+      ],
+    },
+  ],
+  footnote: "* Metrics-only sharing. Session content is never uploaded on any tier.",
+};
+
+export const ecosystem = {
+  marker: "// PARTNERS: TOOL_ECOSYSTEM",
+  index: "007",
+  tools: [
+    "CLAUDE CODE",
+    "CURSOR",
+    "CODEX CLI",
+    "COPILOT",
+    "GEMINI CLI",
+    "WINDSURF",
+    "CLINE",
+    "AIDER",
+    "ZED",
+    "CONTINUE",
+  ],
+  // Indices that receive the glitch treatment. Rarity is what sells it.
+  glitchAt: [2, 6],
+};
+
+export const footer = {
+  wordmark: "tokeIT",
+  copyright: "(C) 2026 TOKEIT. ALL RIGHTS RESERVED.",
+  links: [
+    { href: "#privacy", label: "Privacy" },
+    { href: "mailto:hello@tokeit.dev?subject=tokeIT%20enquiry", label: "Contact" },
+    { href: "mailto:hello@tokeit.dev?subject=tokeIT%20support", label: "Support" },
+    { href: "https://github.com/tokeIT", label: "GitHub" },
+  ] satisfies NavLink[],
+};
+
+export const headerActions = {
+  login: { href: "mailto:hello@tokeit.dev?subject=Log%20in", label: "Log In" },
+  cta: { href: "mailto:hello@tokeit.dev?subject=Request%20a%20demo", label: "Request Demo" },
+};
